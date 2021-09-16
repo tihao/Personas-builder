@@ -27,7 +27,6 @@ bool Personas::Login(){
         if (check_pwd == false) {
 
             std::getline(inFile, line, ',');
-            // std::cout << line << std::endl;
             if(line != user_name){
                 inFile.ignore(1000, '\n');
                 continue;
@@ -59,9 +58,12 @@ bool Personas::Login(){
     if (inFile.eof() == true)
     {
         std::cout << "Not correct user name";
+        inFile.close();
+        return false;
     }
     
     inFile.close();
+    return true;
 }
 
 void Personas::Register() {
