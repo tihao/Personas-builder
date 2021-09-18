@@ -3,6 +3,7 @@
 
 #include <string>
 
+
 class Personas {
 
 public:
@@ -10,10 +11,13 @@ public:
 
     bool Login();
     void Register();
+    void Menu();
     void Print();
+    void Create_Persona();
     void Encrypt();
     void Decrupt();
 
+    
 private:
     struct About{
         std::string first_name;
@@ -22,7 +26,10 @@ private:
         std::string occupation;
         std::string status;
         std::string location;
+        std::string description;
     };
+
+    About about;
 };
 
 #endif // PERSONAS_H

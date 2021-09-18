@@ -92,3 +92,42 @@ void Personas::Register() {
     outFile.close();
 }
 
+void Personas::Create_Persona() {
+    // About about;
+    std::cout << "Enter first name: ";
+    std::cin >> about.first_name;
+    std::cout << "Enter last name: ";
+    std::cin >> about.last_name;
+    std::cout << "Enter age: ";
+    std::cin >> about.age;
+    std::cout << "Enter occupation: ";
+    std::cin >> about.occupation;
+    std::cout << "Enter status: ";
+    std::cin >> about.status;
+    std::cout << "Enter location: ";
+    std::cin >> about.location;
+    std::cout << "Bio Description: ";
+    std::cin >> about.description;
+}
+void Personas::Menu() {
+    char user_input;
+    std::cout << "[C]reate a new persona\n";
+    std::cout << "[O]pen an exist persona\n";
+    std::cout << "[E]dit a persona\n";
+    std::cout << "[D]elete a persona\n";
+    std::cout << "[L]og out\n";
+    std::cout << "Enter: ";
+    std::cin >> user_input;
+    user_input = toupper(user_input);
+    switch (user_input)
+    {
+    case 'C':
+        Create_Persona();
+        break;
+    
+    default:
+        break;
+    }
+
+    
+}
