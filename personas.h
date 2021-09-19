@@ -2,7 +2,7 @@
 #define PERSONAS_H
 
 #include <string>
-
+#define MAX_LINE 4
 
 class Personas {
 
@@ -19,17 +19,22 @@ public:
 
     
 private:
-    struct About{
+    struct Info{
         std::string first_name;
         std::string last_name;
         unsigned age;
         std::string occupation;
+        std::string education;
         std::string status;
         std::string location;
         std::string description;
+        std::string goal[MAX_LINE];
+        std::string need[MAX_LINE];
+        std::string tech[MAX_LINE];
+        unsigned tech_rate[MAX_LINE];
     };
 
-    About about;
+    Info info;
 };
 
 #endif // PERSONAS_H
