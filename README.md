@@ -1,2 +1,2 @@
 # Personas-builder
-Create a personas
+Create a persona
