@@ -2,6 +2,8 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
+#include <ctime>
+#include <stdlib.h>
 Personas::Personas(){
 
 }
@@ -70,6 +72,7 @@ void Personas::Register() {
     std::string user_name;
     std::string pwd;
     std::string confirm_pwd;
+
     std::cout << "Enter user name: ";
     std::cin >> user_name;
     std::cout << "Enter password: ";
@@ -81,7 +84,7 @@ void Personas::Register() {
     } while(pwd != confirm_pwd);
 
     std::ofstream outFile;
-    outFile.open("data.csv");
+    outFile.open("data.csv", std::ios::app);
     if(outFile.is_open()) {
         std::cout << "File is opened\n";
     }
@@ -89,6 +92,10 @@ void Personas::Register() {
         std::cout << "File is not opened\n";
 
     outFile << user_name + "," + pwd + ",";
+    primary_key = Generate_Key();
+    // std::srand(static_cast<unsigned int>(std::time(nullptr)));
+
+    outFile << Generate_Key() + primary_key + Generate_Key() + "\n";
     outFile.close();
 }
 bool Take_Text_Line(std::string text[MAX_LINE]);
@@ -119,10 +126,11 @@ void Personas::Create_Persona() {
         break;
     }
 
+    std::cin.ignore();
     std::cout << "Enter occupation: ";
-    std::cin >> info.occupation;
+    getline(std::cin, info.occupation);
     std::cout << "Enter education: ";
-    std::cin >> info.education;    
+    getline(std::cin, info.education);    
     std::cout << "Enter status: ";
     std::cin >> info.status;
     std::cin.ignore();
@@ -142,8 +150,7 @@ void Personas::Create_Persona() {
     std::cout << "Rate user tech in scale 1 to 5\n";
     std::cout << "=============================================\n";
     int i = 0;
-
-    while(info.tech[i] != "") {
+    while(!info.tech[i].empty()) {
         std::cout << info.tech[i] << ": ";
         std::cin >> info.tech_rate[i];
         if((!info.tech_rate[i]) || (info.tech_rate[i] > 5) ){
@@ -152,8 +159,14 @@ void Personas::Create_Persona() {
             std::cin.ignore();
             continue;
         }
+
         i++;
+        if (i == MAX_LINE) {
+            break;
+        }
     }
+
+    std::cin.ignore();
     //Goals
     std::cout << "=============================================\n";
     std::cout << "Fill out information about user goals\n";
@@ -169,7 +182,22 @@ void Personas::Create_Persona() {
     std::cout << "=============================================\n";
     Take_Text_Line(info.need);
    
- 
+    std::cout << "=============================================\n";
+    std::cout << "Fill out information about user favorite apps\n";
+    std::cout << "press \"Enter\" when the line is empty or type \"None\" to finish fill out \n";
+    std::cout << "Maximum 4 text line\n";
+    std::cout << "=============================================\n";    
+    Take_Text_Line(info.favorite_app);
+
+    std::cout << "=============================================\n";
+    std::cout << "Fill out information about user paint points\n";
+    std::cout << "press \"Enter\" when the line is empty or type \"None\" to finish fill out \n";
+    std::cout << "Maximum 4 text line\n";
+    std::cout << "=============================================\n";
+    Take_Text_Line(info.pain_points);
+
+    std::cout << "Enter user quote: ";
+    getline(std::cin, info.user_quote);
 }
 
 bool Take_Text_Line(std::string text[MAX_LINE]) {
@@ -189,6 +217,19 @@ bool Take_Text_Line(std::string text[MAX_LINE]) {
     }
 
     return true;
+}
+
+std::string Personas::Generate_Key() {
+    std::string primary_key = "";
+    unsigned length = 10;
+    char ch;
+    // std::srand(static_cast<unsigned int>(std::time(nullptr)));
+    for(int i = 0; i < length; i++) {
+        ch = '!' + std::rand() % 93;
+        primary_key += ch;
+    }
+    // std::srand(static_cast<unsigned int>(std::time(nullptr)));
+    return primary_key;
 }
 void Personas::Menu() {
     char user_input;
