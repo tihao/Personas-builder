@@ -4,8 +4,9 @@
 #include <algorithm>
 #include <ctime>
 #include <stdlib.h>
-Personas::Personas(){
 
+Personas::Personas(){
+    
 }
 
 bool Personas::Login(){
@@ -14,7 +15,8 @@ bool Personas::Login(){
     std::string line;
     bool check_pwd = false;
     std::ifstream inFile;
-    inFile.open("data.csv");
+    inFile.open("./data/user-pwd.csv", std::ios::in);
+
     if(inFile.is_open()) {
         std::cout << "File is opened\n";
     }
@@ -72,9 +74,20 @@ void Personas::Register() {
     std::string user_name;
     std::string pwd;
     std::string confirm_pwd;
-
+    std::string line;
     std::cout << "Enter user name: ";
-    std::cin >> user_name;
+    while(true) {
+        std::cin >> user_name;
+        if(user_name.length() < 6 || user_name.length() > 20) {
+            std::cout << "User name must be between 6 and 20 characters\n";
+            std::cout << "Enter user name: ";
+            std::cin.clear();
+            continue;
+        }
+        else
+            break;
+    }
+    
     std::cout << "Enter password: ";
     std::cin >> pwd;
     
@@ -83,17 +96,41 @@ void Personas::Register() {
         std::cin >> confirm_pwd; 
     } while(pwd != confirm_pwd);
 
-    std::ofstream outFile;
-    outFile.open("data.csv", std::ios::app);
-    if(outFile.is_open()) {
-        std::cout << "File is opened\n";
+    std::ifstream inFile;
+
+    inFile.open("./data/user-pwd.csv", std::ios::in);
+    if(!inFile.is_open()) {
+        std::cout << "File is not open\n";
     }
-    else
-        std::cout << "File is not opened\n";
+
+    while(inFile.good()) {
+       
+        std::getline(inFile, line, ',');
+        if (line != user_name)
+        {
+            inFile.ignore(1000, '\n');
+            continue;
+        }
+        else {
+            std::cout << "An account is already registered. Try another\n";
+            inFile.close();
+            Register();
+            return;
+        }
+    }
+
+    inFile.close();
+    std::ofstream outFile;
+
+    outFile.open("./data/user-pwd.csv", std::ios::app);
+
+    if(!outFile.is_open()) {
+        std::cout << "File is not opene\n";
+    }
 
     outFile << user_name + "," + pwd + ",";
+   
     primary_key = Generate_Key();
-    // std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
     outFile << Generate_Key() + primary_key + Generate_Key() + "\n";
     outFile.close();
@@ -101,7 +138,6 @@ void Personas::Register() {
 bool Take_Text_Line(std::string text[MAX_LINE]);
 void Personas::Create_Persona() {
     // Demographics;
-    // std::cin.clear();
     std::cout << "=============================================\n";
     std::cout << "Fill out information about user demograpghics\n";
     std::cout << "=============================================\n";
@@ -167,6 +203,7 @@ void Personas::Create_Persona() {
     }
 
     std::cin.ignore();
+
     //Goals
     std::cout << "=============================================\n";
     std::cout << "Fill out information about user goals\n";
@@ -219,18 +256,69 @@ bool Take_Text_Line(std::string text[MAX_LINE]) {
     return true;
 }
 
+//Get 10 characters from 0 to ~ in ASCII Table
 std::string Personas::Generate_Key() {
     std::string primary_key = "";
-    unsigned length = 10;
+    int length = 10;
     char ch;
-    // std::srand(static_cast<unsigned int>(std::time(nullptr)));
     for(int i = 0; i < length; i++) {
-        ch = '!' + std::rand() % 93;
+        ch = '0' + std::rand() % 78;
         primary_key += ch;
     }
-    // std::srand(static_cast<unsigned int>(std::time(nullptr)));
+
     return primary_key;
 }
+
+void Personas::Save_to_file() {
+    std::ofstream outFile;
+    outFile.open("./data/data.csv", std::ios::app);
+
+    if(!outFile.is_open()) {
+        std::cout << "File is not opene\n";
+    }
+
+    outFile << Generate_Key() + primary_key + Generate_Key() + ","
+            + Encrypt(info.first_name) + "," + Encrypt(info.last_name) + ","
+            + Encrypt(std::to_string(info.age)) + "," + Encrypt(info.occupation) + ","
+            + Encrypt(info.education) + "," + Encrypt(info.status) + ","
+            + Encrypt(info.location) + "," + Encrypt(info.description) + ",";
+    Write_buf_file(outFile, info.goal);
+    Write_buf_file(outFile, info.need);
+    Write_buf_file(outFile, info.tech);
+    for (int i = 0; i < MAX_LINE; i ++) {
+        outFile << Encrypt(std::to_string(info.tech_rate[i])) + ",";
+    }
+    Write_buf_file(outFile, info.favorite_app);
+    Write_buf_file(outFile, info.pain_points);
+    outFile << Encrypt(info.user_quote) + "\n";
+    outFile.close();
+}
+
+void Personas::Write_buf_file(std::ofstream &outFile, std::string str[MAX_LINE]) {
+
+    for(int i = 0; i < MAX_LINE; i++) {
+        outFile << Encrypt(str[i]) + ",";
+    }
+
+}
+//Caesar Cypher Algorithm
+std::string Personas::Encrypt(std::string str) {
+    unsigned key_value = 5;
+    for(unsigned i = 0; i <= str.length(); i++) {
+        str[i] = str[i] + key_value;
+    }
+
+    return str;
+}
+
+std::string Personas::Decrupt(std::string str) {
+    unsigned key_value = 5;
+    for(unsigned i = 0; i <= str.length(); i++) {
+        str[i] = str[i] - key_value;
+    }
+    return str;
+}
+
 void Personas::Menu() {
     char user_input;
     std::cout << "[C]reate a new persona\n";
@@ -251,5 +339,4 @@ void Personas::Menu() {
         break;
     }
 
-    
 }

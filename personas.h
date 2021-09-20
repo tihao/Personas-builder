@@ -16,8 +16,9 @@ public:
     void Create_Persona();
     std::string Generate_Key();
     void Save_to_file();
-    void Encrypt();
-    void Decrupt();
+    void Write_buf_file(std::ofstream &outFile, std::string str[MAX_LINE]);
+    std::string Encrypt(std::string str);
+    std::string Decrupt(std::string str);
 
     
 private:
