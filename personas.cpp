@@ -4,9 +4,38 @@
 #include <algorithm>
 #include <ctime>
 #include <stdlib.h>
-
+#include <cstring>
+#include <iomanip>
+#include <stdlib.h>
 Personas::Personas(){
-    
+    info.first_name = "Hao";
+    info.last_name = "Le";
+    info.age = 23;
+    info.occupation = "Student";
+    info.education = "Computer Science";
+    info.status = "single";
+    info.location = "Satnon, CA";
+    info.description = "Hao Le is UX Designer";
+    for (int i = 0; i < MAX_LINE; i++)
+    {
+        info.goal[i] = "";
+        info.need[i] = "";
+        info.tech[i] = "";
+        info.tech_rate[i] = 0;
+        info.favorite_app[i] = "";
+        info.pain_points[i] = "";
+    }
+
+    info.goal[0] = "Discovering new books/authors to read";
+    info.goal[1] = "Finding unique stores";
+    info.goal[2] = "Become a designer who communicates";
+    // info.goal[3] = "Bec";
+    info.pain_points[0] = "Keeping track of diffrerent series";
+    info.pain_points[1] = "Forgetting a book lauch date";
+    info.pain_points[2] = "Cannot rely";
+    // info.pain_points[3] = "Forgetting a book lauch date 202130504054";
+
+    info.user_quote = "The book is way better than the movie";
 }
 
 bool Personas::Login(){
@@ -330,8 +359,62 @@ std::string Personas::Decrupt(std::string str) {
     return str;
 }
 
+unsigned Min_Length(std::string str[MAX_LINE]);
 void Personas::Display() {
+    transform(info.first_name.begin(), info.first_name.end(), info.first_name.begin(), ::toupper);
+    transform(info.last_name.begin(), info.last_name.end(), info.last_name.begin(), ::toupper);
     
+    std::cout << "======================================================\n";
+    std::cout << info.first_name << " " << info.last_name << std::endl;
+    std::cout << "\"" + info.user_quote + "\"\n";
+    std::cout << "AGE: " << info.age << std::endl;
+    std::cout << "OCCUPATION: " + info.occupation << std::endl;
+    std::cout << "STATUS: " + info.status << std::endl;
+    std::cout << "LOCATION: " + info.location << std::endl;
+    std::cout << "======================================================\n";
+    std::cout << "ABOUT\n" + info.description << std::endl;
+    std::cout << std::endl;
+    
+    unsigned left_length = Min_Length(info.goal); 
+    unsigned right_length = Min_Length(info.pain_points); 
+    if (strlen("GOALS") < left_length) {
+        if (strlen("Paint Points") < right_length) {
+            std::cout <<"GOALS" << std::setw(62 - (strlen("GOALS") - left_length) + (strlen("Paint Points") - right_length)) << "Paint Points" << std::endl;
+        }
+        else
+            std::cout <<"GOALS" << std::setw(62 - (strlen("GOALS") - left_length) + (right_length - strlen("Paint Points"))) << "Paint Points" << std::endl;
+    }
+    else
+        std::cout <<"GOALS" << std::setw(62 - (strlen("GOALS") - left_length) + (right_length - strlen("Paint Points"))) << "Paint Points" << std::endl;
+    
+    for(int i = 0; i < MAX_LINE; i++) {
+        if(info.goal[i] != "") {
+            std::cout << "- " + info.goal[i];
+        }
+        if(info.pain_points[i] != "") {
+            unsigned left_width = info.goal[i].length() - left_length;
+            unsigned rigt_width = info.pain_points[i].length() - right_length;
+            std::cout << std::setw(60 - left_width + rigt_width);
+            std::cout << "- " + info.pain_points[i] << std::endl;
+        }
+        else
+            std::cout << std::endl;
+    }
+    
+
+
+}
+
+//Return min length of array text
+unsigned Min_Length(std::string str[MAX_LINE]) {
+    unsigned min = str[0].length();
+    for(int i = 1; i < MAX_LINE; i++) {
+        if((str[i] != "") && (str[i].length() < min)) {
+            min = str[i].length();
+        }
+    }
+
+    return min;
 }
 void Personas::Menu() {
     char user_input;

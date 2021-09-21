@@ -4,8 +4,9 @@
 
 int main(){
     Personas persona;
-    persona.Create_Persona();
-    persona.Save_to_file();
+    // persona.Create_Persona();
+    persona.Display();
+    // persona.Save_to_file();
     // persona.Register();
     
 

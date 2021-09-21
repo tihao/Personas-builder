@@ -2,6 +2,7 @@
 #define PERSONAS_H
 
 #include <string>
+#include <cmath>
 #define MAX_LINE 4
 
 class Personas {
