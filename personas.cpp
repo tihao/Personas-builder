@@ -305,6 +305,12 @@ void Personas::Write_buf_file(std::ofstream &outFile, std::string str[MAX_LINE])
 std::string Personas::Encrypt(std::string str) {
     unsigned key_value = 5;
     for(unsigned i = 0; i <= str.length(); i++) {
+
+        //No add key value if symbol is '
+        // Avoid ,
+        if (str[i] == 39) {
+            continue;
+        }
         str[i] = str[i] + key_value;
     }
 
@@ -314,11 +320,19 @@ std::string Personas::Encrypt(std::string str) {
 std::string Personas::Decrupt(std::string str) {
     unsigned key_value = 5;
     for(unsigned i = 0; i <= str.length(); i++) {
+
+        //No subtract key value if symbol is '
+        if (str[i] == 39) {
+            continue;
+        }
         str[i] = str[i] - key_value;
     }
     return str;
 }
 
+void Personas::Display() {
+    
+}
 void Personas::Menu() {
     char user_input;
     std::cout << "[C]reate a new persona\n";
