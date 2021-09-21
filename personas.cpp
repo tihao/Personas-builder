@@ -363,30 +363,31 @@ unsigned Min_Length(std::string str[MAX_LINE]);
 void Personas::Display() {
     transform(info.first_name.begin(), info.first_name.end(), info.first_name.begin(), ::toupper);
     transform(info.last_name.begin(), info.last_name.end(), info.last_name.begin(), ::toupper);
-    
+    system("CLS");
     std::cout << "======================================================\n";
     std::cout << info.first_name << " " << info.last_name << std::endl;
-    std::cout << "\"" + info.user_quote + "\"\n";
+    std::cout << "\"" + info.user_quote + "\"\n\n";
     std::cout << "AGE: " << info.age << std::endl;
     std::cout << "OCCUPATION: " + info.occupation << std::endl;
     std::cout << "STATUS: " + info.status << std::endl;
     std::cout << "LOCATION: " + info.location << std::endl;
-    std::cout << "======================================================\n";
+    std::cout << "================================================================================================\n";
     std::cout << "ABOUT\n" + info.description << std::endl;
+    std::cout << "------------------------------------------------------------------------------------------------\n";
     std::cout << std::endl;
     
     unsigned left_length = Min_Length(info.goal); 
     unsigned right_length = Min_Length(info.pain_points); 
     if (strlen("GOALS") < left_length) {
         if (strlen("Paint Points") < right_length) {
-            std::cout <<"GOALS" << std::setw(62 - (strlen("GOALS") - left_length) + (strlen("Paint Points") - right_length)) << "Paint Points" << std::endl;
+            std::cout <<"GOALS" << std::setw(42 - (strlen("GOALS") - left_length) + (strlen("Paint Points") - right_length)) << "Paint Points" << std::endl;
         }
         else
-            std::cout <<"GOALS" << std::setw(62 - (strlen("GOALS") - left_length) + (right_length - strlen("Paint Points"))) << "Paint Points" << std::endl;
+            std::cout <<"GOALS" << std::setw(42 - (strlen("GOALS") - left_length) + (right_length - strlen("Paint Points"))) << "Paint Points" << std::endl;
     }
     else
-        std::cout <<"GOALS" << std::setw(62 - (strlen("GOALS") - left_length) + (right_length - strlen("Paint Points"))) << "Paint Points" << std::endl;
-    
+        std::cout <<"GOALS" << std::setw(42 - (strlen("GOALS") - left_length) + (right_length - strlen("Paint Points"))) << "Paint Points" << std::endl;
+    std::cout << "------------------------------------------------------------------------------------------------\n";
     for(int i = 0; i < MAX_LINE; i++) {
         if(info.goal[i] != "") {
             std::cout << "- " + info.goal[i];
@@ -394,7 +395,7 @@ void Personas::Display() {
         if(info.pain_points[i] != "") {
             unsigned left_width = info.goal[i].length() - left_length;
             unsigned rigt_width = info.pain_points[i].length() - right_length;
-            std::cout << std::setw(60 - left_width + rigt_width);
+            std::cout << std::setw(40 - left_width + rigt_width);
             std::cout << "- " + info.pain_points[i] << std::endl;
         }
         else
