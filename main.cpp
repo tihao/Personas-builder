@@ -1,11 +1,19 @@
 #include "personas.h"
 #include <iostream>
 #include <ctime>
+#include <stdio.h>
+
+
+
 
 int main(){
+
     Personas persona;
     // persona.Create_Persona();
+
     persona.Display();
+    // persona.Export_File("file.txt");
+
     // persona.Save_to_file();
     // persona.Register();
     
@@ -37,6 +45,6 @@ int main(){
     //     }
     // } while (user_input != 'E');
 
-    
+    system("Pause");
     return 0;
 }

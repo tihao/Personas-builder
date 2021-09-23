@@ -15,26 +15,38 @@ Personas::Personas(){
     info.education = "Computer Science";
     info.status = "single";
     info.location = "Satnon, CA";
-    info.description = "Hao Le is UX Designer";
+    info.description = "Hao Le is UX Designer jdhssfdjk kjsdfkjs dkfj skdfjksdf dsk fjkdsj fkdsjfksdf ksdfj ksdfjsiue8iu fiseufidsuif udsi fusdfu isdfuisudfi sdifsdi fhsjkdhf dskjfhdsjk jhf dsfksjdhfjksdhfjs hkfjhdsk jhfdskjfh sdjkfh dskjdsjfh s.";
     for (int i = 0; i < MAX_LINE; i++)
     {
         info.goal[i] = "";
         info.need[i] = "";
         info.tech[i] = "";
-        info.tech_rate[i] = 0;
-        info.favorite_app[i] = "";
+        // info.tech_rate[i] = 0;
+        info.favorite[i] = "";
         info.pain_points[i] = "";
     }
-
+    info.tech[0] = "facebook";
+    info.tech[1] = "instagram";
+    info.tech[2] = "whatsapp";
+    info.tech_rate[0] = 3;
+    info.tech_rate[1] = 5;
+    info.tech_rate[2] = 5;
     info.goal[0] = "Discovering new books/authors to read";
     info.goal[1] = "Finding unique stores";
     info.goal[2] = "Become a designer who communicates";
-    // info.goal[3] = "Bec";
+    info.goal[3] = "Bec aksdjkasjd iasdiasdua";
     info.pain_points[0] = "Keeping track of diffrerent series";
     info.pain_points[1] = "Forgetting a book lauch date";
     info.pain_points[2] = "Cannot rely";
-    // info.pain_points[3] = "Forgetting a book lauch date 202130504054";
-
+    info.pain_points[3] = "Forgetting a book lauch date 202130504054";
+    info.need[0] = "jfdhgdj hgdjh gdfjghdf";
+    info.need[1] = "jfdhgdj hgdjh gdfjghdf";
+    info.need[2] = "jfdhgdj hgdjh gdfjghdf";
+    info.favorite[0] = "orrooko";
+    info.favorite[1] = "dfpdsf";
+    info.favorite[2] = "dkoefks";
+    info.favorite[3] = "3003kkfg";
+    
     info.user_quote = "The book is way better than the movie";
 }
 
@@ -165,6 +177,7 @@ void Personas::Register() {
     outFile.close();
 }
 bool Take_Text_Line(std::string text[MAX_LINE]);
+
 void Personas::Create_Persona() {
     // Demographics;
     std::cout << "=============================================\n";
@@ -174,6 +187,8 @@ void Personas::Create_Persona() {
     std::cin >> info.first_name;
     std::cout << "Enter last name: ";
     std::cin >> info.last_name;
+    std::cout << "Enter user gender: ";
+    std::cin >> info.gender;
 
     // Make sure user input is numeric
     std::cout << "Enter age: ";
@@ -249,11 +264,11 @@ void Personas::Create_Persona() {
     Take_Text_Line(info.need);
    
     std::cout << "=============================================\n";
-    std::cout << "Fill out information about user favorite apps\n";
+    std::cout << "Fill out information about user favorite\n";
     std::cout << "press \"Enter\" when the line is empty or type \"None\" to finish fill out \n";
     std::cout << "Maximum 4 text line\n";
     std::cout << "=============================================\n";    
-    Take_Text_Line(info.favorite_app);
+    Take_Text_Line(info.favorite);
 
     std::cout << "=============================================\n";
     std::cout << "Fill out information about user paint points\n";
@@ -264,6 +279,8 @@ void Personas::Create_Persona() {
 
     std::cout << "Enter user quote: ";
     getline(std::cin, info.user_quote);
+
+    info.created = true;
 }
 
 bool Take_Text_Line(std::string text[MAX_LINE]) {
@@ -303,7 +320,7 @@ void Personas::Save_to_file() {
     outFile.open("./data/data.csv", std::ios::app);
 
     if(!outFile.is_open()) {
-        std::cout << "File is not opene\n";
+        std::cout << "File is not open\n";
     }
 
     outFile << Generate_Key() + primary_key + Generate_Key() + ","
@@ -317,7 +334,7 @@ void Personas::Save_to_file() {
     for (int i = 0; i < MAX_LINE; i ++) {
         outFile << Encrypt(std::to_string(info.tech_rate[i])) + ",";
     }
-    Write_buf_file(outFile, info.favorite_app);
+    Write_buf_file(outFile, info.favorite);
     Write_buf_file(outFile, info.pain_points);
     outFile << Encrypt(info.user_quote) + "\n";
     outFile.close();
@@ -361,51 +378,240 @@ std::string Personas::Decrupt(std::string str) {
 
 unsigned Min_Length(std::string str[MAX_LINE]);
 void Personas::Display() {
+     
     transform(info.first_name.begin(), info.first_name.end(), info.first_name.begin(), ::toupper);
     transform(info.last_name.begin(), info.last_name.end(), info.last_name.begin(), ::toupper);
-    system("CLS");
-    std::cout << "======================================================\n";
-    std::cout << info.first_name << " " << info.last_name << std::endl;
+    
+    std::cout << "================================================================================================\n";
+    std::cout << info.first_name << " " << info.last_name << " | " << info.occupation << std::endl;
     std::cout << "\"" + info.user_quote + "\"\n\n";
     std::cout << "AGE: " << info.age << std::endl;
-    std::cout << "OCCUPATION: " + info.occupation << std::endl;
+    // std::cout << "OCCUPATION: " + info.occupation << std::endl;
     std::cout << "STATUS: " + info.status << std::endl;
     std::cout << "LOCATION: " + info.location << std::endl;
     std::cout << "================================================================================================\n";
-    std::cout << "ABOUT\n" + info.description << std::endl;
+    std::cout << "\nABOUT\n";
     std::cout << "------------------------------------------------------------------------------------------------\n";
+    unsigned num_line = info.description.length() / MAX_CHAR_DES;
+  
+    unsigned init = 0;
+    if(num_line == 0) {
+        std::cout << info.description << std::endl;
+    }
+    else {
+        for(unsigned i = 1; i <= num_line; i++) {
+            for(unsigned j = init  + MAX_CHAR_DES; j > init; j--) {
+                if(info.description[j] == ' ') {
+                    j = j - init;
+                    std::cout << info.description.substr(init, j + 1);
+                    std::cout << std::endl;
+                    init = j + init + 1;
+                    j = 1;
+                }
+            }
+        }
+        std::cout << info.description.substr(init, info.description.length() - init);
+        if(info.description[info.description.length() - 1] != '.') {
+            std::cout << ".";
+        }
+        std::cout << std::endl;
+    }
+ 
+    std::cout << "------------------------------------------------------------------------------------------------\n";
+    std::cout << std::endl << std::endl;
+    Display_Same_Row(info.goal, info.pain_points, "GOALS", "Paint Points");
+    std::cout << "------------------------------------------------------------------------------------------------\n";
+    std::cout << std::endl << std::endl;
+    Display_Same_Row(info.need, info.favorite, "NEEDS", "FAVORITE");
     std::cout << std::endl;
-    
-    unsigned left_length = Min_Length(info.goal); 
-    unsigned right_length = Min_Length(info.pain_points); 
-    if (strlen("GOALS") < left_length) {
-        if (strlen("Paint Points") < right_length) {
-            std::cout <<"GOALS" << std::setw(42 - (strlen("GOALS") - left_length) + (strlen("Paint Points") - right_length)) << "Paint Points" << std::endl;
-        }
-        else
-            std::cout <<"GOALS" << std::setw(42 - (strlen("GOALS") - left_length) + (right_length - strlen("Paint Points"))) << "Paint Points" << std::endl;
-    }
-    else
-        std::cout <<"GOALS" << std::setw(42 - (strlen("GOALS") - left_length) + (right_length - strlen("Paint Points"))) << "Paint Points" << std::endl;
+
+    unsigned left_length = Min_Length(info.tech);
+
+    std::cout << "TECH\n";
     std::cout << "------------------------------------------------------------------------------------------------\n";
+
     for(int i = 0; i < MAX_LINE; i++) {
-        if(info.goal[i] != "") {
-            std::cout << "- " + info.goal[i];
+        if(info.tech[i] != "") {
+            std::cout << info.tech[i] << ": " << std::setw(10 - (info.tech[i].length() - left_length));
+            for(unsigned j = 0; j < 5; j++) {
+                if (j < info.tech_rate[i]) {
+                    std::cout << "[x]";
+                }
+                else
+                    std::cout << "[ ]";
+
+            }
+            std::cout << std::endl; 
         }
-        if(info.pain_points[i] != "") {
-            unsigned left_width = info.goal[i].length() - left_length;
-            unsigned rigt_width = info.pain_points[i].length() - right_length;
-            std::cout << std::setw(40 - left_width + rigt_width);
-            std::cout << "- " + info.pain_points[i] << std::endl;
-        }
-        else
-            std::cout << std::endl;
     }
-    
 
 
 }
 
+void Personas::Export_File(std::string name_file) {
+    
+    std::ofstream outFile;
+    outFile.open(name_file, std::ios::out);
+    
+    transform(info.first_name.begin(), info.first_name.end(), info.first_name.begin(), ::toupper);
+    transform(info.last_name.begin(), info.last_name.end(), info.last_name.begin(), ::toupper);
+    
+    outFile << "================================================================================================\n";
+    outFile << info.first_name << " " << info.last_name << " | " << info.occupation << std::endl;
+    outFile << "\"" + info.user_quote + "\"\n\n";
+    outFile << "AGE: " << info.age << std::endl;
+
+    outFile << "STATUS: " + info.status << std::endl;
+    outFile << "LOCATION: " + info.location << std::endl;
+    outFile << "================================================================================================\n";
+    outFile << "\nABOUT\n";
+    outFile << "------------------------------------------------------------------------------------------------\n";
+    unsigned num_line = info.description.length() / MAX_CHAR_DES;
+  
+    unsigned init = 0;
+    if(num_line == 0) {
+        outFile << info.description << std::endl;
+    }
+    else {
+        for(unsigned i = 1; i <= num_line; i++) {
+            for(unsigned j = init  + MAX_CHAR_DES; j > init; j--) {
+                if(info.description[j] == ' ') {
+                    j = j - init;
+                    outFile << info.description.substr(init, j + 1);
+                    outFile << std::endl;
+                    init = j + init + 1;
+                    j = 1;
+                }
+            }
+        }
+        outFile << info.description.substr(init, info.description.length() - init);
+        if(info.description[info.description.length() - 1] != '.') {
+            outFile << ".";
+        }
+        outFile << std::endl;
+    }
+ 
+    outFile << "------------------------------------------------------------------------------------------------\n";
+    outFile << std::endl << std::endl;
+    Display_Same_Row(outFile, info.goal, info.pain_points, "GOALS", "Paint Points");
+    outFile << "------------------------------------------------------------------------------------------------\n";
+    outFile << std::endl << std::endl;
+    Display_Same_Row(outFile, info.need, info.favorite, "NEEDS", "FAVORITE");
+    outFile << std::endl;
+
+    unsigned left_length = Min_Length(info.tech);
+
+    outFile << "TECH\n";
+    outFile << "------------------------------------------------------------------------------------------------\n";
+
+    for(int i = 0; i < MAX_LINE; i++) {
+        if(info.tech[i] != "") {
+            outFile << info.tech[i] << ": " << std::setw(10 - (info.tech[i].length() - left_length));
+            for(unsigned j = 0; j < 5; j++) {
+                if (j < info.tech_rate[i]) {
+                    outFile << "[x]";
+                }
+                else
+                    outFile << "[ ]";
+
+            }
+            outFile << std::endl; 
+        }
+    }
+
+    outFile.close();
+
+}
+
+void Personas::Display_Same_Row(std::string str1[MAX_LINE], std::string str2[MAX_LINE], std::string category1, std::string category2) {
+    
+    unsigned left_length = Min_Length(str1); 
+    unsigned right_length = Min_Length(str2); 
+    if (category1.length() < left_length) {
+        if (category2.length() < right_length) {
+            std::cout <<category1 << std::setw(42 - (category1.length() - left_length) + (category2.length() - right_length)) << category2 << std::endl;
+        }
+        else
+            std::cout <<category1 << std::setw(42 - (category1.length() - left_length) + (category2.length() - right_length)) << category2 << std::endl;
+    }
+    else
+        std::cout <<category1 << std::setw(42 - (category1.length() - left_length) + (category2.length() - right_length)) << category2 << std::endl;
+    std::cout << "------------------------------------------------------------------------------------------------\n";
+    for(int i = 0; i < MAX_LINE; i++) {
+        if(str1[i] != "") {
+            std::cout << "- " + str1[i];
+        }
+        else
+            std::cout << "  ";
+        if(str2[i] != "") {
+            unsigned left_width = str1[i].length() - left_length;
+            unsigned rigt_width = str2[i].length() - right_length;
+            std::cout << std::setw(40 - left_width + rigt_width);
+            std::cout << "- " + str2[i] << std::endl;
+        }
+        else
+            std::cout << std::endl;
+    }
+}
+
+void Personas::Display_Same_Row(std::ofstream &outFile, std::string str1[MAX_LINE], std::string str2[MAX_LINE], std::string category1, std::string category2) {
+    
+    unsigned left_length = Min_Length(str1); 
+    unsigned right_length = Min_Length(str2); 
+    if (category1.length() < left_length) {
+        if (category2.length() < right_length) {
+            outFile <<category1 << std::setw(42 - (category1.length() - left_length) + (category2.length() - right_length)) << category2 << std::endl;
+        }
+        else
+            outFile <<category1 << std::setw(42 - (category1.length() - left_length) + (category2.length() - right_length)) << category2 << std::endl;
+    }
+    else
+        outFile <<category1 << std::setw(42 - (category1.length() - left_length) + (category2.length() - right_length)) << category2 << std::endl;
+    outFile << "------------------------------------------------------------------------------------------------\n";
+    for(int i = 0; i < MAX_LINE; i++) {
+        if(str1[i] != "") {
+            outFile << "- " + str1[i];
+        }
+        else
+            outFile << "  ";
+        if(str2[i] != "") {
+            unsigned left_width = str1[i].length() - left_length;
+            unsigned rigt_width = str2[i].length() - right_length;
+            outFile << std::setw(40 - left_width + rigt_width);
+            outFile << "- " + str2[i] << std::endl;
+        }
+        else
+            outFile << std::endl;
+    }
+}
+
+
+void Personas::Open_Persona() {
+    std::string str_arry[MAX_ARR];
+    std::string text_line;
+    if (info.created == false) {
+        std::cout << "You need create a persona first\n";
+        return;
+    }
+
+    std::ifstream inFile;
+    inFile.open("/data/data.csv");
+
+    if(!inFile.is_open()) {
+        std::cout << "File is not open\n";
+    }
+
+    while(inFile.good()) {
+        std::getline(inFile, text_line, ',');
+        if(text_line.substr(9, 10) != primary_key ) {
+            inFile.ignore(1000, '\n');
+            continue;
+        }
+
+
+    }
+
+}
 //Return min length of array text
 unsigned Min_Length(std::string str[MAX_LINE]) {
     unsigned min = str[0].length();
