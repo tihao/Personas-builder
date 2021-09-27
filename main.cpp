@@ -28,15 +28,16 @@ int main(){
         std::cout << "Enter: ";
         std::cin >> user_input;
         user_input = toupper(user_input);
+        
         switch (user_input)
         {
         case 'L':
             check = persona.Login();
             if (check == true) persona.Menu();
-            break;
+            continue;
         case 'R':
             persona.Register();
-            break;
+            continue;
         case 'E':
             break;
         default:

@@ -67,21 +67,21 @@ bool Personas::Login(){
     std::ifstream inFile;
     inFile.open("./data/user-pwd.csv", std::ios::in);
 
-    if(inFile.is_open()) {
-        std::cout << "File is opened\n";
-    }
-    else
+    if(!inFile.is_open()) {
         std::cout << "File is not opened\n";
+    }
+
+        
 
 
     std::cout << "Username: ";
     std::cin >> user_name;
-
+    user_name = Encrypt(user_name);
     while(inFile.good()) {
         if (check_pwd == false) {
 
             std::getline(inFile, line, ',');
-            std::cout << line;
+            
             if(line != user_name){
                 inFile.ignore(1000, '\n');
                 continue;
@@ -90,6 +90,7 @@ bool Personas::Login(){
         else if(check_pwd == true){
             std::cout << "Password: ";
             std::cin >> pwd;
+            
             if(line != pwd) {
                 std::cout << "Wrong password\n";
                 continue;
@@ -99,7 +100,7 @@ bool Personas::Login(){
         }
         check_usr = true;
         std::getline(inFile, line, ',');
-        std::cout << line << std::endl;
+        line = Decrupt(line);
         std::cout << "Password: ";
         std::cin >> pwd;
         if(line != pwd) {
@@ -184,7 +185,7 @@ void Personas::Register() {
         std::cout << "File is not opene\n";
     }
 
-    outFile << user_name + "," + pwd + ",";
+    outFile << Encrypt(user_name) + "," + Encrypt(pwd) + ",";
    
     primary_key = Generate_Key();
     std::cout << primary_key << " ";
@@ -609,7 +610,7 @@ void Personas::Display_Same_Row(std::ofstream &outFile, std::string str1[MAX_LIN
 void Personas::Open_Persona() {
     std::string str_arry[MAX_ARR];
     std::string text_line;
-    std::cout << primary_key << '\n';
+   
     //Open persona after created
     if(info.first_name != "") {
         Display();
@@ -629,11 +630,11 @@ void Personas::Open_Persona() {
 
     //Copy information in cvs file to array
     while(inFile.good()) {
+        
         std::getline(inFile, text_line, ',');
+ 
         if((match == false) ) {
-            std::cout << text_line.substr(10, 10);
             if (text_line.substr(10, 10) == primary_key ) {
-                std::cout << "here";
                 match = true;
             }
             else {
@@ -645,12 +646,9 @@ void Personas::Open_Persona() {
         i++;
    
     }
-    // if(inFile.eof() && match == false) {
-    //     std::cout << "Persona have not been created\n";
-    //     return;
-    // }
+    inFile.close();
+    std::cout << str_arry[0] << " " << str_arry[3];
     //Take value in array to class attribute
-    
     Take_Value(str_arry);
     if (info.created == false) {
         return;
@@ -671,7 +669,7 @@ void Personas::Open_Persona() {
 }
 
 void Personas::Take_Value(std::string str_arry[MAX_ARR]) {
-    int i = 0;
+    int i = 1;
     info.first_name = Decrupt(str_arry[i]);
     if (info.first_name != "") {
         info.created = true;
@@ -684,6 +682,7 @@ void Personas::Take_Value(std::string str_arry[MAX_ARR]) {
     info.last_name = Decrupt(str_arry[i]);
     ++i;
     info.age = stoi(Decrupt(str_arry[i]));
+    std::cout << info.age;
     ++i;
     info.occupation = Decrupt(str_arry[i]);
     ++i;
@@ -710,6 +709,7 @@ void Personas::Take_Value(std::string str_arry[MAX_ARR]) {
         ++i;
     }
     for(int j = 0; j < MAX_LINE; j++) {
+        // std::cout << i << ": " << Decrupt(str_arry[i]);
         info.tech_rate[j] = stoi(Decrupt(str_arry[i]));
         ++i;
     }
@@ -753,7 +753,6 @@ void Personas::Menu() {
     case 'C':
         Create_Persona();
         Menu();
-        break;
     case 'O':
         Open_Persona();
         break;
