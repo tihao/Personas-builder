@@ -5,7 +5,7 @@
 #include <cmath>
 #define MAX_LINE 4
 #define MAX_CHAR_DES 100
-#define MAX_ARR 34
+#define MAX_ARR 35
 class Personas {
 
 public:
@@ -23,6 +23,7 @@ public:
     void Create_Persona();
     void Open_Persona();
     std::string Generate_Key();
+    void Take_Value(std::string str_arry[MAX_ARR]);
     void Save_to_file();
     void Write_buf_file(std::ofstream &outFile, std::string str[MAX_LINE]);
     std::string Encrypt(std::string str);

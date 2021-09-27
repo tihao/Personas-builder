@@ -8,46 +8,54 @@
 #include <iomanip>
 #include <stdlib.h>
 Personas::Personas(){
-    info.first_name = "Hao";
-    info.last_name = "Le";
-    info.age = 23;
-    info.occupation = "Student";
-    info.education = "Computer Science";
-    info.status = "single";
-    info.location = "Satnon, CA";
-    info.description = "Hao Le is UX Designer jdhssfdjk kjsdfkjs dkfj skdfjksdf dsk fjkdsj fkdsjfksdf ksdfj ksdfjsiue8iu fiseufidsuif udsi fusdfu isdfuisudfi sdifsdi fhsjkdhf dskjfhdsjk jhf dsfksjdhfjksdhfjs hkfjhdsk jhfdskjfh sdjkfh dskjdsjfh s.";
+    info.first_name = "";
+    info.last_name = "";
+    info.age = 0;
+    info.occupation = "";
+    info.education = "";
+    info.status = "";
+    info.location = "";
+    info.description = "";
+    // info.first_name = "Hao";
+    // info.last_name = "Le";
+    // info.age = 23;
+    // info.occupation = "Student";
+    // info.education = "Computer Science";
+    // info.status = "single";
+    // info.location = "Satnon, CA";
+    // info.description = "Hao Le is UX Designer jdhssfdjk kjsdfkjs dkfj skdfjksdf dsk fjkdsj fkdsjfksdf ksdfj ksdfjsiue8iu fiseufidsuif udsi fusdfu isdfuisudfi sdifsdi fhsjkdhf dskjfhdsjk jhf dsfksjdhfjksdhfjs hkfjhdsk jhfdskjfh sdjkfh dskjdsjfh s.";
     for (int i = 0; i < MAX_LINE; i++)
     {
         info.goal[i] = "";
         info.need[i] = "";
         info.tech[i] = "";
-        // info.tech_rate[i] = 0;
+        info.tech_rate[i] = 0;
         info.favorite[i] = "";
         info.pain_points[i] = "";
     }
-    info.tech[0] = "facebook";
-    info.tech[1] = "instagram";
-    info.tech[2] = "whatsapp";
-    info.tech_rate[0] = 3;
-    info.tech_rate[1] = 5;
-    info.tech_rate[2] = 5;
-    info.goal[0] = "Discovering new books/authors to read";
-    info.goal[1] = "Finding unique stores";
-    info.goal[2] = "Become a designer who communicates";
-    info.goal[3] = "Bec aksdjkasjd iasdiasdua";
-    info.pain_points[0] = "Keeping track of diffrerent series";
-    info.pain_points[1] = "Forgetting a book lauch date";
-    info.pain_points[2] = "Cannot rely";
-    info.pain_points[3] = "Forgetting a book lauch date 202130504054";
-    info.need[0] = "jfdhgdj hgdjh gdfjghdf";
-    info.need[1] = "jfdhgdj hgdjh gdfjghdf";
-    info.need[2] = "jfdhgdj hgdjh gdfjghdf";
-    info.favorite[0] = "orrooko";
-    info.favorite[1] = "dfpdsf";
-    info.favorite[2] = "dkoefks";
-    info.favorite[3] = "3003kkfg";
+    // info.tech[0] = "facebook";
+    // info.tech[1] = "instagram";
+    // info.tech[2] = "whatsapp";
+    // info.tech_rate[0] = 3;
+    // info.tech_rate[1] = 5;
+    // info.tech_rate[2] = 5;
+    // info.goal[0] = "Discovering new books/authors to read";
+    // info.goal[1] = "Finding unique stores";
+    // info.goal[2] = "Become a designer who communicates";
+    // info.goal[3] = "Bec aksdjkasjd iasdiasdua";
+    // info.pain_points[0] = "Keeping track of diffrerent series";
+    // info.pain_points[1] = "Forgetting a book lauch date";
+    // info.pain_points[2] = "Cannot rely";
+    // info.pain_points[3] = "Forgetting a book lauch date 202130504054";
+    // info.need[0] = "jfdhgdj hgdjh gdfjghdf";
+    // info.need[1] = "jfdhgdj hgdjh gdfjghdf";
+    // info.need[2] = "jfdhgdj hgdjh gdfjghdf";
+    // info.favorite[0] = "orrooko";
+    // info.favorite[1] = "dfpdsf";
+    // info.favorite[2] = "dkoefks";
+    // info.favorite[3] = "3003kkfg";
     
-    info.user_quote = "The book is way better than the movie";
+    // info.user_quote = "The book is way better than the movie";
 }
 
 bool Personas::Login(){
@@ -55,6 +63,7 @@ bool Personas::Login(){
     std::string pwd;
     std::string line;
     bool check_pwd = false;
+    bool check_usr = false;
     std::ifstream inFile;
     inFile.open("./data/user-pwd.csv", std::ios::in);
 
@@ -72,6 +81,7 @@ bool Personas::Login(){
         if (check_pwd == false) {
 
             std::getline(inFile, line, ',');
+            std::cout << line;
             if(line != user_name){
                 inFile.ignore(1000, '\n');
                 continue;
@@ -87,7 +97,7 @@ bool Personas::Login(){
             else
                 break;
         }
-        
+        check_usr = true;
         std::getline(inFile, line, ',');
         std::cout << line << std::endl;
         std::cout << "Password: ";
@@ -97,12 +107,17 @@ bool Personas::Login(){
             check_pwd = true;
             continue;
         }
-        else
-            break;
+        else {
+            std::getline(inFile, line, ',');
+
+            //Copy primary key from user account
+            primary_key = line.substr(10, 10);   
+        }
+            
     }
-    if (inFile.eof() == true)
+    if (inFile.eof() == true && check_usr == false)
     {
-        std::cout << "Not correct user name";
+        std::cout << "Not correct user name\n";
         inFile.close();
         return false;
     }
@@ -172,7 +187,7 @@ void Personas::Register() {
     outFile << user_name + "," + pwd + ",";
    
     primary_key = Generate_Key();
-
+    std::cout << primary_key << " ";
     outFile << Generate_Key() + primary_key + Generate_Key() + "\n";
     outFile.close();
 }
@@ -281,6 +296,11 @@ void Personas::Create_Persona() {
     getline(std::cin, info.user_quote);
 
     info.created = true;
+    Save_to_file();
+
+    system("CLS");
+    std::cout << "Completed\n";
+    
 }
 
 bool Take_Text_Line(std::string text[MAX_LINE]) {
@@ -589,29 +609,124 @@ void Personas::Display_Same_Row(std::ofstream &outFile, std::string str1[MAX_LIN
 void Personas::Open_Persona() {
     std::string str_arry[MAX_ARR];
     std::string text_line;
-    if (info.created == false) {
-        std::cout << "You need create a persona first\n";
+    std::cout << primary_key << '\n';
+    //Open persona after created
+    if(info.first_name != "") {
+        Display();
         return;
     }
 
     std::ifstream inFile;
-    inFile.open("/data/data.csv");
+    inFile.open("./data/data.csv");
 
     if(!inFile.is_open()) {
         std::cout << "File is not open\n";
+        return;
     }
 
+    bool match = false;
+    int i = 0;
+
+    //Copy information in cvs file to array
     while(inFile.good()) {
         std::getline(inFile, text_line, ',');
-        if(text_line.substr(9, 10) != primary_key ) {
-            inFile.ignore(1000, '\n');
-            continue;
+        if((match == false) ) {
+            std::cout << text_line.substr(10, 10);
+            if (text_line.substr(10, 10) == primary_key ) {
+                std::cout << "here";
+                match = true;
+            }
+            else {
+                inFile.ignore(1000, '\n');
+                continue;
+            }
         }
+        str_arry[i] = text_line;
+        i++;
+   
+    }
+    // if(inFile.eof() && match == false) {
+    //     std::cout << "Persona have not been created\n";
+    //     return;
+    // }
+    //Take value in array to class attribute
+    
+    Take_Value(str_arry);
+    if (info.created == false) {
+        return;
+    }
+    Display();
 
+       
+    
+    char user_input;
+    std::cout << "[B]ack to menu: ";
+    do {
+        std::cin >> user_input;
+        if(toupper(user_input) == 'B') {
+            Menu();
+        }
+    } while (user_input != 'B');
+    
+}
 
+void Personas::Take_Value(std::string str_arry[MAX_ARR]) {
+    int i = 0;
+    info.first_name = Decrupt(str_arry[i]);
+    if (info.first_name != "") {
+        info.created = true;
+    }
+    if (info.created == false) {
+        std::cout << "Persona have not been created\n";
+        return;
+    }
+    ++i;
+    info.last_name = Decrupt(str_arry[i]);
+    ++i;
+    info.age = stoi(Decrupt(str_arry[i]));
+    ++i;
+    info.occupation = Decrupt(str_arry[i]);
+    ++i;
+    info.education = Decrupt(str_arry[i]);
+    ++i;
+    info.status = Decrupt(str_arry[i]);
+    ++i;
+    info.location = Decrupt(str_arry[i]);
+    ++i;
+    info.description = Decrupt(str_arry[i]);
+    ++i;
+
+    for(int j = 0; j < MAX_LINE; j++) {
+        info.goal[j] = Decrupt(str_arry[i]);
+        ++i;
     }
 
+    for(int j = 0; j < MAX_LINE; j++) {
+        info.need[j] = Decrupt(str_arry[i]);
+        ++i;
+    }
+    for(int j = 0; j < MAX_LINE; j++) {
+        info.tech[j] = Decrupt(str_arry[i]);
+        ++i;
+    }
+    for(int j = 0; j < MAX_LINE; j++) {
+        info.tech_rate[j] = stoi(Decrupt(str_arry[i]));
+        ++i;
+    }
+    for(int j = 0; j < MAX_LINE; j++) {
+        info.favorite[j] = Decrupt(str_arry[i]);
+        ++i;
+    }
+    for(int j = 0; j < MAX_LINE; j++) {
+        info.pain_points[j] = Decrupt(str_arry[i]);
+        ++i;
+    }
+
+    info.user_quote = Decrupt(str_arry[i]);
+    
 }
+
+
 //Return min length of array text
 unsigned Min_Length(std::string str[MAX_LINE]) {
     unsigned min = str[0].length();
@@ -637,8 +752,11 @@ void Personas::Menu() {
     {
     case 'C':
         Create_Persona();
+        Menu();
         break;
-    
+    case 'O':
+        Open_Persona();
+        break;
     default:
         break;
     }
